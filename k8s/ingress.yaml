@@ -1,0 +1,28 @@
+# Optional: needs an ingress controller (scripts install ingress-nginx for kind).
+# catalog.localtest.me resolves to 127.0.0.1 via public DNS, so no hosts-file edit is needed.
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: catalog-api
+  namespace: catalog-lab
+  labels:
+    app.kubernetes.io/name: catalog-api
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "30"
+    nginx.ingress.kubernetes.io/proxy-body-size: "1m"
+    # Production-style options (not enabled in the lab):
+    # nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    # cert-manager.io/cluster-issuer: "letsencrypt-staging"
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: catalog.localtest.me
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: catalog-api
+                port:
+                  name: http

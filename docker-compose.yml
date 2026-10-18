@@ -1,0 +1,22 @@
+# API only (in-memory cache):  docker compose up --build
+# API + Redis cache:           docker compose -f docker-compose.yml -f docker-compose.redis.yml up --build
+name: catalog-lab
+
+services:
+  api:
+    build:
+      context: .
+      target: runtime
+    image: catalog-api:local
+    ports:
+      - "8080:8080"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+    read_only: true
+    tmpfs:
+      - /tmp
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped

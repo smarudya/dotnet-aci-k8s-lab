@@ -1,0 +1,22 @@
+# Override: adds Redis and points the API at it. No credentials (local lab only, port not published).
+services:
+  api:
+    environment:
+      ConnectionStrings__Redis: "redis:6379,abortConnect=false"
+    depends_on:
+      redis:
+        condition: service_healthy
+
+  redis:
+    image: redis:7.4-alpine
+    command: ["redis-server", "--save", "", "--appendonly", "no"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    read_only: true
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
