@@ -1,0 +1,26 @@
+## .NET
+bin/
+obj/
+*.user
+*.suo
+.vs/
+TestResults/
+*.log
+publish/
+
+## Editors / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+## Secrets & local env (never commit)
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.pfx
+secrets.local.yaml
+*.local.yaml
+kubeconfig*
